@@ -65,7 +65,7 @@ def encontrar_palabra_mas_relacionada(
                 similitud = token_texto.similarity(doc_objetivo)
                 if similitud > max_similitud:
                     max_similitud = similitud
-                    mejor_palabra = token_texto.text
+                    mejor_palabra = doc_objetivo.text
 
     if mejor_palabra:
         return mejor_palabra, max_similitud
