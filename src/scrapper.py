@@ -5,6 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from metadata import product_selectors
+from find_words import encontrar_palabras_relacionadas
+from return_similar_words import encontrar_palabras_relacionadas_lista
 # Importa aquí tu configuración del WebDriver (e.g., webdriver.Chrome())
 
 # --- Selectores CSS (Compatibles con Selenium) ---
@@ -38,13 +40,13 @@ def get_attribute_text(driver, metadata, attribute_name):
         element = driver.until(EC.presence_of_element_located((By.CSS_SELECTOR,"#app-component-router-outlet > div > div.routers-views > div > app-product-detail")))
         if metadata[attribute_name]['found_value'] is not None:
             # Si el valor encontrado es uno de los valores esperados, lo devolvemos
-            if element.text.strip():
+            if encontrar_palabras_relacionadas (element.text.strip(), metadata[attribute_name]['selector']):
                 return metadata[attribute_name]['found_value']
             else:
                 return metadata[attribute_name]['default_value']
         if metadata[attribute_name]['default_value'] is None:
             # Si no hay valor por defecto, devolvemos el texto del elemento
-            return element.text.strip()
+            return " ".join(encontrar_palabras_relacionadas_lista (element.text.strip (), metadata[attribute_name]['selector']))
         return metadata[attribute_name]['default_value']
     except NoSuchElementException:
         # print(f"Atributo '{attribute_name}' no encontrado con el selector: {selector}")

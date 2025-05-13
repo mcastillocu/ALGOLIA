@@ -1,8 +1,7 @@
 import spacy
 
 # --- Cargar el modelo de spaCy UNA VEZ ---
-# Cargar el modelo fuera de la función es más eficiente,
-# ya que la carga del modelo es costosa.
+# Cargar el modelo fuera de la función es más eficiente.
 # Intentamos cargar el modelo 'md'. Si no está, damos instrucciones.
 try:
     nlp = spacy.load("es_core_news_md")
@@ -14,10 +13,10 @@ except IOError:
     nlp = None # Si no se carga, nlp será None
 
 
-def encontrar_palabras_relacionadas(texto: str, palabra_objetivo: str, umbral_similitud: float = 0.6) -> bool:
+def encontrar_palabras_relacionadas_lista(texto: str, palabra_objetivo: str, umbral_similitud: float = 0.6) -> list[str]:
     """
-    Verifica si un texto contiene palabras semánticamente relacionadas
-    con una palabra o frase objetivo, usando similitud vectorial.
+    Encuentra y retorna una lista de palabras en un texto que son semánticamente
+    relacionadas con una palabra o frase objetivo, usando similitud vectorial.
 
     Args:
         texto (str): El texto donde buscar.
@@ -27,12 +26,14 @@ def encontrar_palabras_relacionadas(texto: str, palabra_objetivo: str, umbral_si
                                    0.6 es un valor inicial razonable, pero puede requerir ajuste.
 
     Returns:
-        bool: True si se encuentra al menos una palabra relacionada por encima
-              del umbral, False en caso contrario.
+        list[str]: Una lista de las palabras (texto original del token) encontradas
+                   en el texto que superaron el umbral de similitud con la
+                   palabra objetivo. Retorna una lista vacía si no se encuentran
+                   palabras relacionadas o si el modelo no está disponible/funciona.
     """
     if nlp is None:
         print("El modelo de spaCy no está disponible. No se puede procesar.")
-        return False
+        return [] # Retorna lista vacía si el modelo no está disponible
 
     # Procesar el texto y la palabra objetivo con el modelo
     doc_texto = nlp(texto)
@@ -43,11 +44,14 @@ def encontrar_palabras_relacionadas(texto: str, palabra_objetivo: str, umbral_si
     if not doc_objetivo.has_vector:
         print(f"Advertencia: La palabra o frase objetivo '{palabra_objetivo}' no tiene un vector asociado en el modelo.")
         print("Puede que sea una palabra poco común o fuera del vocabulario del modelo.")
-        return False
+        return [] # Retorna lista vacía si la palabra objetivo no tiene vector
+
+    # Lista para almacenar las palabras encontradas que cumplen el criterio
+    palabras_encontradas = []
 
     # Iterar sobre los tokens (palabras) del texto
     for token_texto in doc_texto:
-        # Ignorar puntuación, espacios y quizás stop words
+        # Ignorar puntuación, espacios, y stop words
         # (las stop words rara vez serán semánticamente similares a palabras clave)
         if token_texto.is_punct or token_texto.is_space or token_texto.is_stop:
             continue
@@ -60,14 +64,13 @@ def encontrar_palabras_relacionadas(texto: str, palabra_objetivo: str, umbral_si
         # spaCy permite comparar la similitud entre un Token y un Doc/Span
         similitud = token_texto.similarity(doc_objetivo)
 
-        # Si la similitud supera el umbral, hemos encontrado una palabra relacionada
+        # Si la similitud supera el umbral, añadimos la palabra a nuestra lista
         if similitud >= umbral_similitud:
-            # Opcional: Puedes imprimir qué palabra se encontró y su similitud
-            # print(f"Encontrada palabra potencialmente relacionada: '{token_texto.text}' con '{palabra_objetivo}' (Similitud: {similitud:.2f})")
-            return True # Encontramos al menos una, retornamos True inmediatamente
+            # Añadimos el texto original del token a la lista
+            palabras_encontradas.append(token_texto.text)
 
-    # Si recorrimos todo el texto y no encontramos ninguna palabra por encima del umbral
-    return False
+    # Retorna la lista completa de palabras encontradas
+    return palabras_encontradas
 
 # --- Ejemplos de Uso ---
 
@@ -76,41 +79,58 @@ if __name__ == "__main__":
     palabra1 = "perro"
     print(f"Texto: '{texto1}'")
     print(f"Palabra objetivo: '{palabra1}'")
-    print(f"¿Tiene palabras relacionadas? {encontrar_palabras_relacionadas(texto1, palabra1)}") # Esperado: True (canino)
+    print(f"Palabras relacionadas encontradas: {encontrar_palabras_relacionadas_lista(texto1, palabra1)}")
+    # Esperado: ['canino'] (asumiendo que 'canino' supera el umbral con 'perro')
     print("-" * 20)
 
     texto2 = "El gato duerme la siesta. Es un felino perezoso."
     palabra2 = "perro"
     print(f"Texto: '{texto2}'")
     print(f"Palabra objetivo: '{palabra2}'")
-    print(f"¿Tiene palabras relacionadas? {encontrar_palabras_relacionadas(texto2, palabra2)}") # Esperado: False (a menos que gato/felino tengan *cierta* similitud con perro en el modelo, pero probablemente baja)
+    print(f"Palabras relacionadas encontradas: {encontrar_palabras_relacionadas_lista(texto2, palabra2)}")
+    # Esperado: [] (a menos que 'gato' o 'felino' tengan una similitud sorprendente alta con 'perro' en el modelo)
     print("-" * 20)
 
-    texto3 = "Este coche es muy veloz."
+    texto3 = "Este coche es muy veloz. Me gusta el auto."
     palabra3 = "rápido"
     print(f"Texto: '{texto3}'")
+    palabra3 = "rápido"
     print(f"Palabra objetivo: '{palabra3}'")
-    print(f"¿Tiene palabras relacionadas? {encontrar_palabras_relacionadas(texto3, palabra3)}") # Esperado: True (veloz ~ rápido)
+    print(f"Palabras relacionadas encontradas: {encontrar_palabras_relacionadas_lista(texto3, palabra3)}")
+    # Esperado: ['veloz'] (asumiendo que 'veloz' supera el umbral con 'rápido')
     print("-" * 20)
 
     texto4 = "La casa es grande y bonita."
     palabra4 = "ordenador"
     print(f"Texto: '{texto4}'")
     print(f"Palabra objetivo: '{palabra4}'")
-    print(f"¿Tiene palabras relacionadas? {encontrar_palabras_relacionadas(texto4, palabra4)}") # Esperado: False
+    print(f"Palabras relacionadas encontradas: {encontrar_palabras_relacionadas_lista(texto4, palabra4)}")
+    # Esperado: []
     print("-" * 20)
 
-    texto5 = "Compramos un automóvil nuevo."
+    texto5 = "Compramos un automóvil nuevo. Es un gran auto."
     palabra5 = "coche"
     print(f"Texto: '{texto5}'")
+    palabra5 = "coche"
     print(f"Palabra objetivo: '{palabra5}'")
-    print(f"¿Tiene palabras relacionadas? {encontrar_palabras_relacionadas(texto5, palabra5)}") # Esperado: True (automóvil ~ coche)
+    print(f"Palabras relacionadas encontradas: {encontrar_palabras_relacionadas_lista(texto5, palabra5)}")
+    # Esperado: ['automóvil', 'auto'] (asumiendo que superan el umbral)
     print("-" * 20)
 
     texto6 = "El pájaro vuela alto."
     palabra6 = "pez"
-    # Prueba con un umbral más bajo si quieres ser menos estricto
     print(f"Texto: '{texto6}'")
-    print(f"Palabra objetivo: '{palabra6}' (Umbral: 0.4)")
-    print(f"¿Tiene palabras relacionadas? {encontrar_palabras_relacionadas(texto6, palabra6, umbral_similitud=0.4)}") # Probablemente False incluso con umbral bajo
+    palabra_clave6_baja = "pez"
+    print(f"Palabra objetivo: '{palabra_clave6_baja}' (Umbral: 0.4)")
+    print(f"Palabras relacionadas encontradas: {encontrar_palabras_relacionadas_lista(texto6, palabra_clave6_baja, umbral_similitud=0.4)}")
+    # Probablemente [] incluso con umbral bajo
+    print("-" * 20)
+
+    texto7 = "Es un perro muy grande y tiene un canino enorme y le encanta jugar con otros cachorros. Un can feliz."
+    palabra7 = "perro"
+    print(f"Texto: '{texto7}'")
+    palabra7 = "perro"
+    print(f"Palabra objetivo: '{palabra7}'")
+    print(f"Palabras relacionadas encontradas: {encontrar_palabras_relacionadas_lista(texto7, palabra7)}")
+    # Esperado: ['canino', 'cachorros', 'can'] (asumiendo que superan el umbral)
     print("-" * 20)
