@@ -1,17 +1,17 @@
 product_selectors = {
     "Vegan": {
         "selector": "vegano",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Gluten Free": {
         "selector": "gluten",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Sugar Free": {
         "selector": "azucar",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Talla": {
@@ -66,12 +66,12 @@ product_selectors = {
     },
     "Con fragancia (Sí / No)": {
         "selector": "fragancia",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Con protección solar (Sí / No)": {
         "selector": "bloqueador",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "FPS": {
@@ -96,17 +96,17 @@ product_selectors = {
     },
     "Hipoalergénico / Dermatológicamente probado (Sí / No)": {
         "selector": "hipoalergenico",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Con ingredientes naturales (Sí / No)": {
         "selector": "naturales",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Sin conservantes (Sí / No)": {
         "selector": "conservantes",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Material / Textura bebé": {
@@ -116,17 +116,17 @@ product_selectors = {
     },
     "Antiderrames / Anticólicos / Antibacteriano (Sí / No)": {
         "selector": "antiderrames",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Con BPA (Sí / No)": {
         "selector": "bpa",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Compatible con esterilizadores (Sí / No)": {
         "selector": "esterilizadores",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Facilidad de digestión (Sí / No / Alta / Media / Baja)": {
@@ -136,17 +136,17 @@ product_selectors = {
     },
     "Con alcohol (Sí / No)": {
         "selector": "alcohol",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Protección 24h / Resistente al agua (Sí / No)": {
         "selector": "proteccion",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Con color (Sí / No)": {
         "selector": "color",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Zonas de uso": {
@@ -156,92 +156,92 @@ product_selectors = {
     },
     "Libre de alcohol (Sí / No)": {
         "selector": "alcohol",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Libre de aceites (Sí / No)": {
         "selector": "aceites",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Libre de parabenos (Sí / No)": {
         "selector": "parabenos",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Libre de comedogénicos (Sí / No)": {
         "selector": "comedogenicos",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Con enjuague (Sí / No)": {
         "selector": "enjuague",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Orgánico (Sí / No)": {
         "selector": "organico",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Natural (Sí / No)": {
         "selector": "natural",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Sin aditivos (Sí / No)": {
         "selector": "aditivos",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Vegetariano (Sí / No)": {
         "selector": "vegetariano",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Keto (Sí / No)": {
         "selector": "keto",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Bajo en sodio (Sí / No)": {
         "selector": "sodio",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Fuente de proteína (Sí / No)": {
         "selector": "proteina",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Fuente de fibra (Sí / No)": {
         "selector": "fibra",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Fuente de vitaminas (Sí / No)": {
         "selector": "vitaminas",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Apto para diabéticos (Sí / No)": {
         "selector": "diabeticos",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Apto para celíacos (Sí / No)": {
         "selector": "celiacos",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Con edulcorantes naturales (Sí / No)": {
         "selector": "edulcorantes",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Con edulcorantes artificiales (Sí / No)": {
         "selector": "artificiales",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Función hogar": {
@@ -256,12 +256,12 @@ product_selectors = {
     },
     "Biodegradable (Sí / No)": {
         "selector": "biodegradable",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Reutilizable (Sí / No)": {
         "selector": "reutilizable",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Compatible con lavavajillas / microondas / mascotas / superficies": {
@@ -311,12 +311,12 @@ product_selectors = {
     },
     "Con cafeína (Sí / No)": {
         "selector": "cafeina",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Sin lactosa (Sí / No)": {
         "selector": "lactosa",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Certificaciones": {
@@ -331,7 +331,7 @@ product_selectors = {
     },
     "Incluye accesorios (Sí / No)": {
         "selector": "accesorios",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     },
     "Tipo de deporte": {
@@ -341,7 +341,7 @@ product_selectors = {
     },
     "Compatibilidad con apps, máquinas o rutinas (Sí / No)": {
         "selector": "gimnsasio",
-        "default_value": "No",
+        "default_value": " ",
         "found_value": "Sí"
     }
 }
