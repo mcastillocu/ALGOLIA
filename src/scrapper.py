@@ -103,8 +103,27 @@ def extract_default_columns_from_web_scraper(item_id: str, driver: WebDriver, wa
         if the button or data elements are not found within the timeout.
     """
     try:
-        button_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".box__see")))
-        button_element.click()
+        
+
+        try:
+            wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".box__see"))).click()
+        except Exception as e_click:
+            print(f"Error clicking the button for item {item_id}: {e_click}")
+            try:
+                button_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".box__see")))
+                driver.execute_script("arguments[0].click();", button_element)
+            except Exception as e_js_click:
+                print(f"Error clicking the button via JavaScript for item {item_id}: {e_js_click}")
+                try:
+                    button_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".box__see")))
+                    driver.execute_script("arguments[0].scrollIntoView(true);", button_element)
+                    import time
+                    time.sleep(0.5)
+                    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".box__see"))).click()
+                except Exception as e_scroll_click:
+                    print(f"Error clicking after scrolling for item {item_id}: {e_scroll_click}")
+                    return {} # Give up if all click attempts fail
+
         driver.implicitly_wait(0.5)  
 
         data_elements = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".container-data-sheet .item")))
