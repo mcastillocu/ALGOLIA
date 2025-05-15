@@ -26,41 +26,59 @@ from encontrar_palabra_mas_relacionada import encontrar_palabra_mas_relacionada
 # que has navegado a la página del producto.
 
 
-def get_attribute_text(driver, metadata, attribute_name):
+def get_attribute_text_scraper(driver: WebDriver, wait: WebDriverWait, metadata: Dict[str, Any], attribute_name: str) -> Optional[str]:
     """
-    Intenta encontrar un elemento usando el selector CSS y devuelve su texto.
-    Maneja la excepción si el elemento no se encuentra.
+    Extracts and processes text content from specific elements on a webpage based on metadata.
+
+    Args:
+        driver: A Selenium WebDriver instance.
+        wait: A WebDriverWait instance.
+        metadata: A dictionary containing information about the attributes to extract,
+                  including selectors, expected values, default values, and related keywords.
+        attribute_name: The name of the attribute to extract.
+
+    Returns:
+        The extracted and processed text content, or a default value if not found or processed.
     """
+    informacion = ""
     try:
-        # Usamos find_element para obtener el primer elemento que coincida
-        # con cualquiera de las partes del selector CSS combinado con comas.
-        # element = driver.find_element(By.CSS_SELECTOR, selector)
-        # Aquí podrías necesitar lógica adicional para extraer el valor específico
-        # si el selector apunta a un contenedor más grande.
-        # Por ahora, devolvemos el texto completo del primer elemento encontrado.
-        element = driver.until(
-            EC.presence_of_element_located((
-                By.CSS_SELECTOR,
-                "#app-component-router-outlet > div > div.routers-views > div > app-product-detail"
-            )))
-        if metadata[attribute_name]['found_value'] is not None:
-            # Si el valor encontrado es uno de los valores esperados, lo devolvemos
-            if encontrar_palabras_relacionadas(
-                    element.text.strip(),
-                    metadata[attribute_name]['selector']):
-                return metadata[attribute_name]['found_value']
-            else:
-                return metadata[attribute_name]['default_value']
-        if metadata[attribute_name]['found_value'] is None:
-            # Si no hay valor por defecto, devolvemos el texto del elemento
-            return encontrar_palabra_mas_relacionada(
-                element.text.strip(),
-                metadata[attribute_name]['related_keywords'])
-        return metadata[attribute_name]['default_value']
+        title_element = driver.find_element(By.CSS_SELECTOR, "h1.product-detail-container__title")
+        informacion += title_element.text.replace(r'\W+', ' ')
     except NoSuchElementException:
-        # print(f"Atributo '{attribute_name}' no encontrado con el selector: {selector}")
-        return metadata[attribute_name][
-            "default_value"]  # O devuelve un valor predeterminado como 'No especificado'
+        pass
+
+    try:
+        description_element = driver.find_element(By.CSS_SELECTOR, "p.product-detail-container__description")
+        informacion += " " + description_element.text.replace(r'\W+', ' ')
+    except NoSuchElementException:
+        pass
+
+    try:
+        seo_element = driver.find_element(By.CSS_SELECTOR, "div.seo-container")
+        informacion += " " + seo_element.text.replace(r'\W+', ' ')
+    except NoSuchElementException:
+        pass
+
+    if attribute_name in metadata:
+        attribute_data = metadata[attribute_name]
+        found_value = attribute_data.get('found_value')
+        default_value = attribute_data.get('default_value')
+        selector = attribute_data.get('selector')
+        related_keywords = attribute_data.get('related_keywords')
+
+        if found_value is not None:
+            # Assuming encontrar_palabras_relacionadas is a function you have defined elsewhere
+            if selector and encontrar_palabras_relacionadas(informacion, selector):
+                return found_value
+            else:
+                return default_value
+        elif related_keywords:
+            # Assuming encontrar_palabra_mas_relacionada is a function you have defined elsewhere
+            return encontrar_palabra_mas_relacionada(informacion, related_keywords)
+        else:
+            return default_value
+    else:
+        return None 
 
 
 def extract_default_columns_from_web_scraper(item_id: str, driver: WebDriver, wait) -> dict:
@@ -104,8 +122,6 @@ def extract_default_columns_from_web_scraper(item_id: str, driver: WebDriver, wa
     except Exception as e:
         print(f"An unexpected error occurred while extracting data for item {item_id}: {e}")
         return {}
-    finally:
-        driver.implicitly_wait(0)
 
 # Recuerda cerrar el driver al final
 # driver.quit()
@@ -129,6 +145,8 @@ def obtener_info_producto(item_id, driver):
         wait = WebDriverWait(driver, 10)
         basic_information = extract_default_columns_from_web_scraper(item_id, driver, wait)
 
+        
+
         nombre_elemento = wait.until(
             EC.presence_of_element_located((
                 By.CSS_SELECTOR,
@@ -138,7 +156,7 @@ def obtener_info_producto(item_id, driver):
         item = dict()
         for key, selector in product_selectors.items():
             # Usar la función get_attribute_text para obtener el texto del atributo
-            item[key] = get_attribute_text(wait, product_selectors, key)
+            item[key] = get_attribute_text(driver, wait, product_selectors, key)
 
         # Esperar a que el elemento del precio esté presente (ejemplo)
         precio_elemento = wait.until(
