@@ -122,7 +122,7 @@ def extract_default_columns_from_web_scraper(item_id: str, driver: WebDriver, wa
                     wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".box__see"))).click()
                 except Exception as e_scroll_click:
                     print(f"Error clicking after scrolling for item {item_id}: {e_scroll_click}")
-                    return {} # Give up if all click attempts fail
+                    return {} 
 
         driver.implicitly_wait(0.5)  
 
