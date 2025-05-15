@@ -100,8 +100,6 @@ def extract_default_columns_from_web_scraper(item_id: str, driver: WebDriver, wa
     try:
         button_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".box__see")))
         button_element.click()
-        wait.until(lambda driver: driver.execute_script('return document.readyState === "complete"'), message="Page load incomplete after button click.")
-        
         driver.implicitly_wait(0.3)  # 300 milliseconds
 
         data_elements = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".container-data-sheet .item")))
@@ -161,7 +159,7 @@ def obtener_info_producto(item_id, driver, defaults: Dict[str, Any]):
             # Usar la función get_attribute_text para obtener el texto del atributo
             item[key] = get_attribute_text(driver, wait, product_selectors, key)
 
-        return {'Item': item_id, 'Nombre': nombre, **item, **basic_information, **defaults}
+        return {'Item': item_id, 'Nombre': nombre, **defaults, **item, **basic_information}
     except Exception as e:
         print(f"Error al procesar la página del producto {item_id}: {e}")
         return None
