@@ -62,9 +62,53 @@ def get_attribute_text(driver, metadata, attribute_name):
             "default_value"]  # O devuelve un valor predeterminado como 'No especificado'
 
 
+def extract_default_columns_from_web_scraper(item_id: str, driver: WebDriver, wait) -> dict:
+    """
+    Extracts data from specific elements on a webpage after clicking a button.
+
+    Args:
+        item_id: An identifier for the item being processed (for logging or context).
+        driver: A Selenium WebDriver instance.
+
+    Returns:
+        A dictionary where keys are extracted titles (without the trailing colon)
+        and values are their corresponding descriptions. Returns an empty dictionary
+        if the button or data elements are not found within the timeout.
+    """
+    try:
+        button_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".box__see")))
+        button_element.click()
+        wait.until(lambda driver: driver.execute_script('return document.readyState === "complete"'), message="Page load incomplete after button click.")
+        
+        driver.implicitly_wait(0.3)  # 300 milliseconds
+
+        data_elements = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".container-data-sheet .item")))
+        extracted_data = {}
+        for item in data_elements:
+            try:
+                title_element = item.find_element(By.CSS_SELECTOR, ".title")
+                description_element = item.find_element(By.CSS_SELECTOR, ".description")
+                title = title_element.text.rstrip(':')
+                description = description_element.text
+                extracted_data[title] = description
+            except Exception as e:
+                print(f"Error extracting data for item {item_id}: {e}")
+                continue 
+
+        return extracted_data
+
+    except TimeoutException:
+        print(f"Timeout occurred while trying to find or interact with elements for item {item_id}.")
+        return {}
+    except Exception as e:
+        print(f"An unexpected error occurred while extracting data for item {item_id}: {e}")
+        return {}
+    finally:
+        driver.implicitly_wait(0)
+
 # Recuerda cerrar el driver al final
 # driver.quit()
-def obtener_info_producto(item_id, driver):
+def obtener_info_producto(driver):
     """
     Abre una página del producto en un navegador, espera a que el contenido cargue
     y extrae la información.
@@ -82,6 +126,7 @@ def obtener_info_producto(item_id, driver):
 
         # Esperar a que el elemento del nombre del producto esté presente (ejemplo)
         wait = WebDriverWait(driver, 10)
+        basic_information = extract_default_columns_from_web_scraper(item_id, driver, wait)
 
         nombre_elemento = wait.until(
             EC.presence_of_element_located((
@@ -102,7 +147,7 @@ def obtener_info_producto(item_id, driver):
             )))
         precio = precio_elemento.text.strip()
 
-        return {'Item': item_id, 'Nombre': nombre, **item}
+        return {'Item': item_id, 'Nombre': nombre, **item, **basic_information}
     except Exception as e:
         print(f"Error al procesar la página del producto {item_id}: {e}")
         return None
