@@ -109,7 +109,7 @@ def extract_default_columns_from_web_scraper(item_id: str, driver: WebDriver, wa
 
 # Recuerda cerrar el driver al final
 # driver.quit()
-def obtener_info_producto(driver):
+def obtener_info_producto(item_id, driver):
     """
     Abre una página del producto en un navegador, espera a que el contenido cargue
     y extrae la información.
