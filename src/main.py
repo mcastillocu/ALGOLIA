@@ -49,6 +49,7 @@ def main():
             print(f"Scrapeando información para el ítem: {item_id}")
             info_producto = obtener_info_producto(item_id,driver, defaults)
             if info_producto:
+                print(info_producto)
                 resultados.append(info_producto)
         if driver:
             driver.quit()

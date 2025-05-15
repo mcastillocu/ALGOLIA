@@ -144,10 +144,8 @@ def obtener_info_producto(item_id, driver, defaults: Dict[str, Any]):
 
         # Esperar a que el elemento del nombre del producto esté presente (ejemplo)
         wait = WebDriverWait(driver, 10)
+        driver.implicitly_wait(1) 
         basic_information = extract_default_columns_from_web_scraper(item_id, driver, wait)
-
-        
-
         nombre_elemento = wait.until(
             EC.presence_of_element_located((
                 By.CSS_SELECTOR,
