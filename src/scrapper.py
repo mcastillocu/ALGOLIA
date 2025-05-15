@@ -8,6 +8,9 @@ from selenium.common.exceptions import NoSuchElementException
 from metadata import product_selectors
 from find_words import encontrar_palabras_relacionadas
 from encontrar_palabra_mas_relacionada import encontrar_palabra_mas_relacionada
+from typing import Dict, List, Any
+
+
 # Importa aquí tu configuración del WebDriver (e.g., webdriver.Chrome())
 
 # --- Selectores CSS (Compatibles con Selenium) ---
@@ -125,7 +128,7 @@ def extract_default_columns_from_web_scraper(item_id: str, driver: WebDriver, wa
 
 # Recuerda cerrar el driver al final
 # driver.quit()
-def obtener_info_producto(item_id, driver):
+def obtener_info_producto(item_id, driver, defaults: Dict[str, Any]):
     """
     Abre una página del producto en un navegador, espera a que el contenido cargue
     y extrae la información.
@@ -158,15 +161,7 @@ def obtener_info_producto(item_id, driver):
             # Usar la función get_attribute_text para obtener el texto del atributo
             item[key] = get_attribute_text(driver, wait, product_selectors, key)
 
-        # Esperar a que el elemento del precio esté presente (ejemplo)
-        precio_elemento = wait.until(
-            EC.presence_of_element_located((
-                By.CSS_SELECTOR,
-                '#app-component-router-outlet > div > div.routers-views > div > app-product-detail > div.container-fluid.cont-product-detail > div.row.m-0.mktpl-product-detail.py-2.py-lg-4 > div.col-12.d-none.d-md-inline-block.col-lg-3.pr-0.pt-4 > div > app-mktpl-price-box > div > div.box__price > span'
-            )))
-        precio = precio_elemento.text.strip()
-
-        return {'Item': item_id, 'Nombre': nombre, **item, **basic_information}
+        return {'Item': item_id, 'Nombre': nombre, **item, **basic_information, **defaults}
     except Exception as e:
         print(f"Error al procesar la página del producto {item_id}: {e}")
         return None
