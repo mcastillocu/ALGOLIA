@@ -8,7 +8,7 @@ from selenium.common.exceptions import NoSuchElementException
 from metadata import product_selectors
 from find_words import encontrar_palabras_relacionadas
 from encontrar_palabra_mas_relacionada import encontrar_palabra_mas_relacionada
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 
 # Importa aquí tu configuración del WebDriver (e.g., webdriver.Chrome())

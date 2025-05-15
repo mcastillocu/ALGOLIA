@@ -5,7 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 from scrapper import obtener_info_producto
 from utils import guardar_datos
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 default_columns = ["Item", "categoría", "sub categoría", "Descripción Item", "División"]
 
