@@ -9,6 +9,7 @@ from metadata import product_selectors
 from find_words import encontrar_palabras_relacionadas
 from encontrar_palabra_mas_relacionada import encontrar_palabra_mas_relacionada
 from typing import Dict, List, Any, Optional
+from selenium.common.exceptions import TimeoutException
 
 
 # Importa aquí tu configuración del WebDriver (e.g., webdriver.Chrome())
@@ -155,7 +156,7 @@ def obtener_info_producto(item_id, driver, defaults: Dict[str, Any]):
         item = dict()
         for key, selector in product_selectors.items():
             # Usar la función get_attribute_text para obtener el texto del atributo
-            item[key] = get_attribute_text(driver, wait, product_selectors, key)
+            item[key] = get_attribute_text_scraper(driver, wait, product_selectors, key)
 
         return {'Item': item_id, 'Nombre': nombre, **defaults, **item, **basic_information}
     except Exception as e:
