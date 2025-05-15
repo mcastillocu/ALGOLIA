@@ -78,7 +78,11 @@ def get_attribute_text_scraper(driver: WebDriver, wait: WebDriverWait, metadata:
                 return default_value
         elif related_keywords:
             # Assuming encontrar_palabra_mas_relacionada is a function you have defined elsewhere
-            return encontrar_palabra_mas_relacionada(informacion, related_keywords)
+            word, umbral = encontrar_palabra_mas_relacionada(informacion, related_keywords)
+            if umbral >= 0.7:
+                return word
+            else:
+                return default_value
         else:
             return default_value
     else:
@@ -101,9 +105,11 @@ def extract_default_columns_from_web_scraper(item_id: str, driver: WebDriver, wa
     try:
         button_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".box__see")))
         button_element.click()
-        driver.implicitly_wait(0.3)  # 300 milliseconds
+        driver.implicitly_wait(0.5)  
 
         data_elements = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".container-data-sheet .item")))
+        
+        driver.implicitly_wait(0.5) 
         extracted_data = {}
         for item in data_elements:
             try:
