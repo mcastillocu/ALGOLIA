@@ -147,12 +147,6 @@ product_selectors = {
         "found_value": "Sí",
         "related_keywords": ["parabenos", "libre parabenos", "paraben free"]
     },
-    "Libre comedogénicos (Sí / No)": {
-        "selector": "comedogenicos",
-        "default_value": " ",
-        "found_value": "Sí",
-        "related_keywords": ["no comedogénico", "non-comedogenic", "libre comedogenicos"]
-    },
 
     "Natural (Sí / No)": {
         "selector": "natural",

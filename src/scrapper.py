@@ -164,7 +164,7 @@ def obtener_info_producto(item_id, driver, defaults: Dict[str, Any]):
         dict: Un diccionario con la información del producto (nombre, precio, etc.),
               o None si ocurre un error o el producto no se encuentra.
     """
-    url = f"https://www.farmatodo.com.co/producto/{item_id}"
+    url = f"https://www.farmatodo.com.ve/producto/{item_id}"
     try:
         driver.get(url)
 

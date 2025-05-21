@@ -7,7 +7,7 @@ from scrapper import obtener_info_producto
 from utils import guardar_datos
 from typing import Dict, List, Any, Optional
 
-default_columns = ["Item", "categoría", "sub categoría", "Descripción Item", "División"]
+default_columns = ["SKU", "NOMBRE", "DEPARMENT_MD", "CATEGORY_MD", "SUBCATEGORY_MD"]
 
 def filter_object_by_keys(obj: Dict[str, Any], keys_to_keep: List[str]) -> Dict[str, Any]:
     """
@@ -33,9 +33,9 @@ def main():
     y guarda los resultados en un nuevo archivo Excel.
     """
     try:
-        df_input = pd.read_excel("data/input_2.xlsx")
+        df_input = pd.read_excel("data/input_ve.xlsx")
         if 'Item' not in df_input.columns:
-            print("La columna 'Item' no se encontró en el archivo input_2.xlsx.")
+            print("La columna 'Item' no se encontró en el archivo input_ve.xlsx.")
             return
 
         resultados = []
@@ -45,7 +45,7 @@ def main():
 
 
             defaults = filter_object_by_keys(row, default_columns)
-            item_id = str(row['Item'])  # Asegurarse de que el ID sea una cadena
+            item_id = str(row['SKU'])  # Asegurarse de que el ID sea una cadena
             print(f"Scrapeando información para el ítem: {item_id}")
             info_producto = obtener_info_producto(item_id,driver, defaults)
             if info_producto:
@@ -55,7 +55,7 @@ def main():
             driver.quit()
 
         if resultados:
-            guardar_datos(resultados, "output/output_2.xlsx")
+            guardar_datos(resultados, "output/output_ve.xlsx")
         else:
             print("No se encontraron datos para guardar.")
 
