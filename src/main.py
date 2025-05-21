@@ -33,9 +33,9 @@ def main():
     y guarda los resultados en un nuevo archivo Excel.
     """
     try:
-        df_input = pd.read_excel("data/input.xlsx")
+        df_input = pd.read_excel("data/input_2.xlsx")
         if 'Item' not in df_input.columns:
-            print("La columna 'Item' no se encontró en el archivo input.xlsx.")
+            print("La columna 'Item' no se encontró en el archivo input_2.xlsx.")
             return
 
         resultados = []
@@ -55,7 +55,7 @@ def main():
             driver.quit()
 
         if resultados:
-            guardar_datos(resultados, "output/output.xlsx")
+            guardar_datos(resultados, "output/output_2.xlsx")
         else:
             print("No se encontraron datos para guardar.")
 
