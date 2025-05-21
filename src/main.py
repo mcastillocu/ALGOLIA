@@ -34,7 +34,7 @@ def main():
     """
     try:
         df_input = pd.read_excel("data/input_ve.xlsx")
-        if 'Item' not in df_input.columns:
+        if 'SKU' not in df_input.columns:
             print("La columna 'Item' no se encontró en el archivo input_ve.xlsx.")
             return
 
